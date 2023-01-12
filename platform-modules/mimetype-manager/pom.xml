@@ -32,11 +32,11 @@
             <artifactId>cloud-store-sdk_2.12</artifactId>
             <version>1.4.5</version>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
