@@ -170,17 +170,27 @@ object CSPMetaUtil {
     repArray
   }
 
-  private def stringReplacer(mapValue: util.Map[String, AnyRef]): util.HashMap[String, AnyRef] = {
-    val updatedMap = new util.HashMap[String, AnyRef]()
+  private def stringReplacer(mapValue: util.Map[String, AnyRef]): util.Map[String, AnyRef] = {
 
     val specificSubstring = "https://oci.diksha.gov.in"
     val newSubstring = "https://obj.diksha.gov.in"
 
-    mapValue.keySet().toArray(Array[String]()).map { x =>
-      updatedMap.put(x, mapValue.get(x).toString.replace(specificSubstring, newSubstring))
+    val keyList = List("previewUrl", "downloadUrl", "variants",
+      "appIcon", "artifactUrl", "streamingUrl", "posterImage")
+
+    keyList.foreach { key =>
+      if (mapValue.containsKey(key)) {
+        val currentValue = mapValue.get(key)
+        if (currentValue.isInstanceOf[String]) {
+          val stringValue = currentValue.asInstanceOf[String]
+          if (stringValue.contains(specificSubstring)) {
+            mapValue.put(key, stringValue.replace(specificSubstring, newSubstring))
+          }
+        }
+      }
     }
-    logger.info("CSPMetaUtil ::: updateAbsolutePath util.Map[String, AnyRef] ::: updateAbsolutePath oci to obj :: " + updatedMap)
-    updatedMap
+    logger.info("CSPMetaUtil ::: updateAbsolutePath util.Map[String, AnyRef] ::: updateAbsolutePath oci to obj :: " + mapValue)
+    mapValue
   }
 
 }
