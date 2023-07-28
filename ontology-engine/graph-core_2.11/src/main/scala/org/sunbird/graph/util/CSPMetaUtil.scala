@@ -34,9 +34,8 @@ object CSPMetaUtil {
       updatedMeta
     } else data
     logger.info("CSPMetaUtil ::: updateAbsolutePath util.Map[String, AnyRef] ::: updateAbsolutePath returnData :: " + returnData)
-    returnData
+    stringReplacer(returnData)
   }
-
   def updateAbsolutePath(node: Node): Node = {
     val metadata = updateAbsolutePath(node.getMetadata)
     node.setMetadata(metadata)
@@ -81,7 +80,7 @@ object CSPMetaUtil {
       updatedMeta
     } else data
     logger.info("CSPMetaUtil ::: updateRelativePath util.Map[String, AnyRef] ::: data after url replace :: " + result)
-    result
+    stringReplacer(result)
   }
 
   def saveExternalRelativePath(data: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
@@ -95,7 +94,7 @@ object CSPMetaUtil {
     val updatedData = JsonUtils.deserialize(updatedObjString, classOf[java.util.Map[String, AnyRef]])
 
     logger.info("CSPMetaUtil ::: saveExternalRelativePath util.Map[String, AnyRef] ::: data after url replace :: " + updatedData)
-    updatedData
+    stringReplacer(updatedData)
   }
 
   def updateExternalRelativePath(data: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
@@ -111,7 +110,7 @@ object CSPMetaUtil {
     }
     data.put("values", updatedValues)
     logger.info("CSPMetaUtil ::: updateExternalRelativePath util.Map[String, AnyRef] ::: data after url replace :: " + data)
-    data
+    stringReplacer(data)
   }
 
   def updateExternalAbsolutePath(data: java.util.Map[String, AnyRef]): java.util.Map[String, AnyRef] = {
@@ -128,7 +127,7 @@ object CSPMetaUtil {
       updatedMeta
     } else data
     logger.info("CSPMetaUtil ::: updateExternalAbsolutePath util.Map[String, AnyRef] ::: data before url replace :: " + returnData)
-    returnData
+    stringReplacer(returnData)
   }
 
   private def getBasePath(key: String, value: AnyRef, oldPath: Array[String], newPath: Array[String]): AnyRef = {
@@ -169,6 +168,19 @@ object CSPMetaUtil {
       repArray(i) = repStr
     }
     repArray
+  }
+
+  private def stringReplacer(mapValue: util.Map[String, AnyRef]): util.HashMap[String, AnyRef] = {
+    val updatedMap = new util.HashMap[String, AnyRef]()
+
+    val specificSubstring = "https://oci.diksha.gov.in"
+    val newSubstring = "https://obj.diksha.gov.in"
+
+    mapValue.keySet().toArray(Array[String]()).map { x =>
+      updatedMap.put(x, mapValue.get(x).toString.replace(specificSubstring, newSubstring))
+    }
+    logger.info("CSPMetaUtil ::: updateAbsolutePath util.Map[String, AnyRef] ::: updateAbsolutePath oci to obj :: " + updatedMap)
+    updatedMap
   }
 
 }
