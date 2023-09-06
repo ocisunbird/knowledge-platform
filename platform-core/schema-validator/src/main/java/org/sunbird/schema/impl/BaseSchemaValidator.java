@@ -94,6 +94,7 @@ public abstract class BaseSchemaValidator implements ISchemaValidator {
         Map<String, Object> dataMap = JsonUtils.deserialize(dataWithDefaults, Map.class);
         Map<String, Object> externalData = getExternalProps(dataMap);
         Map<String, Object> relations = getRelations(dataMap);
+        System.out.println("before ValidationResult::::::::::::::"+messages+"::::::dataMap::::::::"+dataMap+":::::::relations:::::::::"+relations+":::::::::externalData:::::::::::"+externalData);
         return new ValidationResult(messages, dataMap, relations, externalData);
     }
 

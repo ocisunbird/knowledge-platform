@@ -20,14 +20,21 @@ object DefinitionNode {
       val graphId: String = request.getContext.get("graph_id").asInstanceOf[String]
       val version: String = request.getContext.get("version").asInstanceOf[String]
       val schemaName: String = request.getContext.get("schemaName").asInstanceOf[String]
+      printf("before ObjectCategoryDefinition");
       val objectCategoryDefinition: ObjectCategoryDefinition = getObjectCategoryDefinition(request.getRequest.getOrDefault("primaryCategory", "").asInstanceOf[String],
         schemaName, request.getContext.getOrDefault("channel", "all").asInstanceOf[String])
+      printf("before getDefinition");
       val definition = DefinitionFactory.getDefinition(graphId, schemaName, version, objectCategoryDefinition)
+      printf("before validateRequest");
       definition.validateRequest(request)
+      printf("before getNode");
       val inputNode = definition.getNode(request.getRequest)
-	  updateRelationMetadata(inputNode)
+      printf("before updateRelationMetadata");
+      updateRelationMetadata(inputNode)
+      printf("before definition validate");
       definition.validate(inputNode, "create", setDefaultValue) recoverWith { case e: CompletionException => throw e.getCause}
-  }
+      printf("after definition validate");
+    }
 
     def getExternalProps(graphId: String, version: String, schemaName: String, ocd: ObjectCategoryDefinition = ObjectCategoryDefinition())(implicit ec: ExecutionContext, oec: OntologyEngineContext): List[String] = {
         val definition = DefinitionFactory.getDefinition(graphId, schemaName, version, ocd)

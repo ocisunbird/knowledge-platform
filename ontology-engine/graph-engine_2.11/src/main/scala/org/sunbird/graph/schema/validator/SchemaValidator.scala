@@ -11,6 +11,7 @@ trait SchemaValidator extends IDefinition {
     @throws[Exception]
     abstract override def validate(node: Node, operation: String, setDefaultValue: Boolean)(implicit ec: ExecutionContext, oec:OntologyEngineContext): Future[Node] = {
         if(setDefaultValue){
+          printf("before schemaValidator.validate:::::::::::::::"+node);
             val result = schemaValidator.validate(node.getMetadata)
             if(setDefaultValue && operation.equalsIgnoreCase("create")) {
                 node.setMetadata(result.getMetadata)
