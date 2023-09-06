@@ -51,7 +51,8 @@ trait FrameworkValidator extends IDefinition {
                 case value: Array[String] => value.forall(term => list.contains(term))
                 case _ => throw new ClientException("CLIENT_ERROR", "Validation Errors.", util.Arrays.asList("Please provide correct value for [" + cat + "]"))
               }
-
+              printf("cacheKey::::::::::::::::"+cacheKey);
+              printf("list::::::::::::::::"+list);
               if (!result) {
                 if (list.isEmpty) {
                   errors.add(cat + " range data is empty from the given framework.")
