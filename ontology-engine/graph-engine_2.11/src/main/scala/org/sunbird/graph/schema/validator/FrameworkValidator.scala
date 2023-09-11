@@ -27,14 +27,15 @@ trait FrameworkValidator extends IDefinition {
     val fwCategories: List[String] = schemaValidator.getConfig.getStringList("frameworkCategories").asScala.toList
     val graphId: String = if(StringUtils.isNotBlank(node.getGraphId)) node.getGraphId else "domain"
     val orgAndTargetFWData: Future[(List[String], List[String])] = if(StringUtils.equalsIgnoreCase(Platform.getString("master.category.validation.enabled", "Yes"), "Yes")) getOrgAndTargetFWData(graphId, "Category") else Future(List(), List())
-
+    val condition = StringUtils.equalsIgnoreCase(Platform.getString("master.category.validation.enabled", "Yes"), "Yes");
+    println("###################" + condition + "####################");
     orgAndTargetFWData.map(orgAndTargetTouple => {
       val orgFwTerms = orgAndTargetTouple._1
       val targetFwTerms = orgAndTargetTouple._2
 
       validateAndSetMultiFrameworks(node, orgFwTerms, targetFwTerms).map(_ => {
         val framework: String = node.getMetadata.getOrDefault("framework", "").asInstanceOf[String]
-        if (null != fwCategories && fwCategories.nonEmpty && framework.nonEmpty) {
+        if (null != fwCategories && fwCategories.nonEmpty && framework.nonEmpty && condition) {
           //prepare data for validation
           val fwMetadata: Map[String, AnyRef] = node.getMetadata.asScala.filterKeys(key => fwCategories.contains(key))
           //validate data from cache
