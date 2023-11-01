@@ -22,7 +22,7 @@ trait PropAsEdgeValidator extends IDefinition {
             if (!keys.isEmpty) {
                 keys.toArray().toStream.map(key => {
                     val cacheKey = prefix + schemaValidator.getConfig.getString(edgePropsKey + "." + key).toLowerCase
-                    val list = RedisCache.getList(cacheKey)
+                    val list = RedisCache.getList(cacheKey).map(_.trim)
                     if (CollectionUtils.isNotEmpty(list)) {
                         val value = node.getMetadata.get(key)
                         if (value.isInstanceOf[String]) {
