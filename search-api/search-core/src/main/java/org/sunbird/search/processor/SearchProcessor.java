@@ -38,11 +38,7 @@ import org.sunbird.telemetry.logger.TelemetryManager;
 import scala.concurrent.ExecutionContext;
 import scala.concurrent.Future;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SearchProcessor {
@@ -223,6 +219,8 @@ public class SearchProcessor {
 		if (null != fields && !fields.isEmpty()) {
 			fields.add("objectType");
 			fields.add("identifier");
+			//adding a dummy field to fetch new ES request
+			fields.add(UUID.randomUUID().toString());
 			searchSourceBuilder.fetchSource(fields.toArray(new String[fields.size()]), null);
 		}
 
