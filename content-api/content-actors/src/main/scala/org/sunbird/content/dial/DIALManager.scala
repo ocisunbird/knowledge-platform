@@ -30,6 +30,7 @@ object DIALManager {
 		val objectId: String = request.getContext.getOrDefault(DIALConstants.IDENTIFIER, "").asInstanceOf[String]
 		val reqList: List[Map[String, List[String]]] = getRequestData(request)
 		val requestMap: Map[String, List[String]] = validateAndGetRequestMap(channelId, reqList)
+		println(s"linkType value = $linkType")
 		linkType match {
 			case DIALConstants.CONTENT => linkContent(requestMap, request.getContext)
 			case DIALConstants.COLLECTION => linkCollection(objectId, requestMap, request.getContext)
@@ -136,6 +137,7 @@ object DIALManager {
 				validateDuplicateDIALCodes(consolidatedUnitDIALMap.filter(rec => rec._2.asInstanceOf[List[String]].nonEmpty))
 
 				val hierarchyReq = getHierarchyRequest(req, objectId, updatedChildrenHierarchy, rootNode)
+				println(s"hierarchy req = ${hierarchyReq.getRequest}")
 				oec.graphService.saveExternalProps(hierarchyReq).flatMap(rec => if(requestMap.contains(objectId)) {
 					val updateReq = getLinkUpdateRequest(req, rootNode, requestMap, objectId)
 
