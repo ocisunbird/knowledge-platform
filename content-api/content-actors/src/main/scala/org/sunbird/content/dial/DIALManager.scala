@@ -31,6 +31,7 @@ object DIALManager {
 		val objectId: String = request.getContext.getOrDefault(DIALConstants.IDENTIFIER, "").asInstanceOf[String]
 		val reqList: List[Map[String, List[String]]] = getRequestData(request)
 		val requestMap: Map[String, List[String]] = validateAndGetRequestMap(channelId, reqList)
+
 		linkType match {
 			case DIALConstants.CONTENT => linkContent(requestMap, request.getContext)
 			case DIALConstants.COLLECTION => linkCollection(objectId, requestMap, request.getContext)

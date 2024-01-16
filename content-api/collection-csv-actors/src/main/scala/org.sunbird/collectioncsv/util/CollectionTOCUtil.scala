@@ -107,6 +107,7 @@ object CollectionTOCUtil {
     }
     val headerParam = new util.HashMap[String, String]{put(CollectionTOCConstants.X_CHANNEL_ID, channelId); put(CollectionTOCConstants.CONTENT_TYPE_HEADER, CollectionTOCConstants.APPLICATION_JSON);}
     val requestUrl = Platform.config.getString(CollectionTOCConstants.LINK_DIAL_CODE_API) + "/" + collectionID
+
     TelemetryManager.log("CollectionTOCUtil --> linkDIALCode --> requestUrl: " + requestUrl)
     TelemetryManager.log("CollectionTOCUtil --> linkDIALCode --> reqMap: " + JsonUtils.serialize(reqMap))
     val linkResponse = oec.httpUtil.post(requestUrl, reqMap, headerParam)

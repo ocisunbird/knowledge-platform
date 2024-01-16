@@ -77,14 +77,14 @@ object CollectionCSVManager extends CollectionInputFileReader  {
     val updateHierarchyResponse = UpdateHierarchyManager.updateHierarchy(getUpdateHierarchyRequest(nodesMetadata, hierarchyMetadata))
     TelemetryManager.info(s"CollectionCSVManager:updateCollection --> identifier: ${collectionHierarchy(CollectionTOCConstants.IDENTIFIER).toString} -> after invoking updateHierarchyManager: " + updateHierarchyResponse)
 
-    // Invoke DIAL code linking if mode=UPDATE
-    if(mode.equals(CollectionTOCConstants.UPDATE)) {
+//    // Invoke DIAL code linking if mode=UPDATE
+    updateHierarchyResponse.map{ res => if(mode.equals(CollectionTOCConstants.UPDATE)) {
       linkDIALCodes(folderInfoMap, collectionHierarchy(CollectionTOCConstants.CHANNEL).toString, collectionHierarchy(CollectionTOCConstants.IDENTIFIER).toString)
+       res
+      } else res
     }
-
-    updateHierarchyResponse
   }
-
+  
   def createCSVFileAndStore(collectionHierarchy: Map[String, AnyRef], collectionTocFileName: String)(implicit ss: StorageService): String = {
     val collectionName = collectionHierarchy(CollectionTOCConstants.NAME).toString
     val collectionType = collectionHierarchy.getOrElse(CollectionTOCConstants.CONTENT_TYPE,"").toString
@@ -287,7 +287,6 @@ object CollectionCSVManager extends CollectionInputFileReader  {
                   .equalsIgnoreCase(CollectionTOCConstants.YES)) CollectionTOCConstants.YES else CollectionTOCConstants.NO
 
                 val dialCode = if(csvRecordMap(CollectionTOCConstants.QR_CODE).nonEmpty) csvRecordMap(CollectionTOCConstants.QR_CODE).trim else ""
-
                 val csvLinkedContentsList: Seq[String] = csvRecord.toMap.asScala.toMap.map(colData => {
                   if(linkedContentHdrColumnsList.contains(colData._1) && colData._2.nonEmpty) colData._2.trim.toLowerCase() else ""
                 }).filter(msg => msg.nonEmpty).toSeq
