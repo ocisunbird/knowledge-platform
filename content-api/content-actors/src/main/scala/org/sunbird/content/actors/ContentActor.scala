@@ -73,7 +73,9 @@ class ContentActor @Inject() (implicit oec: OntologyEngineContext, ss: StorageSe
 	}
 
 	def read(request: Request): Future[Response] = {
+		logger.info("readreq:::::::::::::::::::::::: " + request)
 		val responseSchemaName: String = request.getContext.getOrDefault(ContentConstants.RESPONSE_SCHEMA_NAME, "").asInstanceOf[String]
+		logger.info("responseSchemaName:::::::::::::::::::::::: " + responseSchemaName)
 		val fields: util.List[String] = JavaConverters.seqAsJavaListConverter(request.get("fields").asInstanceOf[String].split(",").filter(field => StringUtils.isNotBlank(field) && !StringUtils.equalsIgnoreCase(field, "null"))).asJava
 		request.getRequest.put("fields", fields)
 		logger.info("fields:::::::::::::::::::::::: " + request)
