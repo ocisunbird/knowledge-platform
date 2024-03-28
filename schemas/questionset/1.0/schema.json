@@ -711,6 +711,9 @@
     },
     "reviewStatus": {
       "type": "string"
+    },
+    "reviewerQualityChecks": {
+      "type": "object"
     }
   },
   "additionalProperties": false
